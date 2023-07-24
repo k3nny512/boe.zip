@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <button id="login">Login with Battle.net</button>
+    <p id="status">Not logged in</p>
+    <button id="logout" style="display: none;">Logout</button>
+
+    <script>
+        document.getElementById('login').addEventListener('click', function() {
+            // Redirect the user to your AWS API Gateway URL
+            var url = 'https://i8q13x3b0b.execute-api.eu-central-1.amazonaws.com/default/battlenet';
+            window.location.href = url;
+        });
+
+        window.onload = function() {
+            if (document.cookie.indexOf('session_id') !== -1) {
+                document.getElementById('status').textContent = 'Logged in';
+                document.getElementById('logout').style.display = 'block';
+            }
+            // Log the cookies
+            console.log("Cookies: ", document.cookie);
+        };
+
+        document.getElementById('logout').onclick = function() {
+            document.cookie = 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.getElementById('status').textContent = 'Not logged in';
+            document.getElementById('logout').style.display = 'none';
+        };
+    </script>
+</body>
+</html>
