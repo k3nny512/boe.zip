@@ -21,6 +21,15 @@
             console.log("Cookies:", document.cookie);
             console.log("Cookies:", document.cookie);
 
+
+
+            const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    if (sessionId) {
+        document.getElementById('status').textContent = 'Logged in';
+        document.getElementById('logout').style.display = 'block';
+    }
+
         };
 
         document.getElementById('logout').onclick = function() {
