@@ -15,29 +15,32 @@
         });
 
         window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sessionId = urlParams.get('session_id');
-            if (sessionId) {
-                document.cookie = `session_id=${sessionId}; Secure`;
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    if (sessionId) {
+        document.cookie = `session_id=${sessionId}; Secure`;
 
-                // Create a new URL object
-                const url = new URL(window.location.href);
+        // Create a new URL object
+        const url = new URL(window.location.href);
 
-                // Remove the session_id parameter
-                url.searchParams.delete('session_id');
+        // Remove the session_id parameter
+        url.searchParams.delete('session_id');
 
-                // Redirect to the new URL
-                window.location.href = url.toString();
-            }
+        // Redirect to the new URL
+        window.location.href = url.toString();
+    }
 
-            const userInfo = JSON.parse(document.cookie.replace(/(?:(?:^|.*;\s*)UserInfo\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
-            if (userInfo) {
-                document.getElementById('status').textContent = 'Logged in';
-                document.getElementById('battletag').textContent = 'BattleTag: ' + userInfo.battletag;
-                document.getElementById('characters').innerHTML = userInfo.characters.map(character => `<li>${character.name}</li>`).join('');
-                document.getElementById('logout').style.display = 'block';
-            }
-        };
+    const userInfoCookie = document.cookie.replace(/(?:(?:^|.*;\s*)UserInfo\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    if (userInfoCookie) {
+        const userInfo = JSON.parse(userInfoCookie);
+        if (userInfo) {
+            document.getElementById('status').textContent = 'Logged in';
+            document.getElementById('battletag').textContent = 'BattleTag: ' + userInfo.battletag;
+            document.getElementById('characters').innerHTML = userInfo.characters.map(character => `<li>${character.name}</li>`).join('');
+            document.getElementById('logout').style.display = 'block';
+        }
+    }
+};
 
         document.getElementById('logout').onclick = function() {
             document.cookie = 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
