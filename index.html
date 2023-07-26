@@ -16,38 +16,44 @@
         document.getElementById('login').addEventListener('click', function() {
             // Redirect the user to your AWS API Gateway URL
             var url = 'https://i8q13x3b0b.execute-api.eu-central-1.amazonaws.com/default/battlenet';
+            console.log("Redirecting to:", url);
             window.location.href = url;
         });
 
         window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sessionId = urlParams.get('session_id');
-    if (sessionId) {
-        document.cookie = `session_id=${sessionId}; Secure`;
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            console.log("Session ID from URL:", sessionId);
+            if (sessionId) {
+                document.cookie = `session_id=${sessionId}; Secure`;
 
-        // Create a new URL object
-        const url = new URL(window.location.href);
+                // Create a new URL object
+                const url = new URL(window.location.href);
 
-        // Remove the session_id parameter
-        url.searchParams.delete('session_id');
+                // Remove the session_id parameter
+                url.searchParams.delete('session_id');
 
-        // Redirect to the new URL
-        window.location.href = url.toString();
-    }
+                // Redirect to the new URL
+                console.log("Redirecting to:", url.toString());
+                window.location.href = url.toString();
+            }
 
-    const userInfoCookie = document.cookie.replace(/(?:(?:^|.*;\s*)UserInfo\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    if (userInfoCookie) {
-        const userInfo = JSON.parse(userInfoCookie);
-        if (userInfo) {
-            document.getElementById('status').textContent = 'Logged in';
-            document.getElementById('battletag').textContent = 'BattleTag: ' + userInfo.battletag;
-            document.getElementById('characters').innerHTML = userInfo.characters.map(character => `<li>${character.name}</li>`).join('');
-            document.getElementById('logout').style.display = 'block';
-        }
-    }
-};
+            const userInfoCookie = document.cookie.replace(/(?:(?:^|.*;\s*)UserInfo\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            console.log("User info from cookie:", userInfoCookie);
+            if (userInfoCookie) {
+                const userInfo = JSON.parse(userInfoCookie);
+                if (userInfo) {
+                    console.log("User info:", userInfo);
+                    document.getElementById('status').textContent = 'Logged in';
+                    document.getElementById('battletag').textContent = 'BattleTag: ' + userInfo.battletag;
+                    document.getElementById('characters').innerHTML = userInfo.characters.map(character => `<li>${character.name}</li>`).join('');
+                    document.getElementById('logout').style.display = 'block';
+                }
+            }
+        };
 
         document.getElementById('logout').onclick = function() {
+            console.log("Logging out");
             document.cookie = 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             document.cookie = 'UserInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             document.getElementById('status').textContent = 'Not logged in';
