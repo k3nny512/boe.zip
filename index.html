@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <title>v0.5</title>
+        <title>v0.6</title>
 </head>
 <body>
     <button id="login">Login with Battle.net</button>
     <button id="userinfo">get user data</button>
+    <button id="jsoninfo">get user data</button>
+
 
     <p id="status">Not logged in!</p>
     <p id="battletag"></p>
@@ -38,9 +40,31 @@
 
         });
 
+        document.getElementById('jsoninfo').addEventListener('click', function() {
+            // Redirect the user to your AWS API Gateway URL
+            let authToken = getCookie('session_id');
+            console.log(authToken);
+            var url = `https://i8q13x3b0b.execute-api.eu-central-1.amazonaws.com/default/battlenet?session_id=${authToken}`;
+            console.log("Retrive user data:", url);
+            
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+
+
+        });
+
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const sessionId = urlParams.get('session_id');
+            const userInfo = urlParams.get('user_info');
+
             console.log("Session ID from URL:", sessionId);
             if (sessionId) {
                 document.cookie = `session_id=${sessionId}; Secure`;
@@ -55,9 +79,19 @@
                 console.log("Redirecting to:", url.toString());
                 window.location.href = url.toString();
             }
+            
+            if (userInfo) {
+                document.cookie = `user_info=${userInfo}; Secure`;
 
+
+            }
+            
             let authToken = getCookie('session_id');
             console.log(authToken);
+
+            let userLog = getCookie('user_info');
+            console.log(userLog);
+
 
             const userInfoCookie = document.cookie.replace(/(?:(?:^|.*;\s*)UserInfo\s*\=\s*([^;]*).*$)|^.*$/, "$1");
             console.log("User info from cookie:", userInfoCookie);
