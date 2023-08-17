@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <title>v0.3</title>
+        <title>v0.4</title>
 </head>
 <body>
     <button id="login">Login with Battle.net</button>
@@ -11,11 +11,27 @@
     <button id="logout" style="display: none;">Logout</button>
 
     <script>
+
+        function getCookie(name) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
         document.getElementById('login').addEventListener('click', function() {
             // Redirect the user to your AWS API Gateway URL
             var url = 'https://i8q13x3b0b.execute-api.eu-central-1.amazonaws.com/default/battlenet';
             console.log("Redirecting to:", url);
             window.location.href = url;
+        });
+
+        document.getElementById('userinfo').addEventListener('click', function() {
+            // Redirect the user to your AWS API Gateway URL
+            var url = 'https://i8q13x3b0b.execute-api.eu-central-1.amazonaws.com/default/battlenet';
+            console.log("Redirecting to:", url);
+            window.location.href = url;
+
+
         });
 
         window.onload = function() {
@@ -35,6 +51,9 @@
                 console.log("Redirecting to:", url.toString());
                 window.location.href = url.toString();
             }
+
+            let authToken = getCookie('session_id');
+            console.log(authToken);
 
             const userInfoCookie = document.cookie.replace(/(?:(?:^|.*;\s*)UserInfo\s*\=\s*([^;]*).*$)|^.*$/, "$1");
             console.log("User info from cookie:", userInfoCookie);
