@@ -5,7 +5,7 @@
 </head>
 <body>
     <button id="login">Login with Battle.net</button>
-    <button id="userinfo">Login with Battle.net</button>
+    <button id="userinfo">get user data</button>
 
     <p id="status">Not logged in!</p>
     <p id="battletag"></p>
@@ -29,8 +29,10 @@
 
         document.getElementById('userinfo').addEventListener('click', function() {
             // Redirect the user to your AWS API Gateway URL
-            var url = 'https://i8q13x3b0b.execute-api.eu-central-1.amazonaws.com/default/battlenet';
-            console.log("Redirecting to:", url);
+            let authToken = getCookie('session_id');
+            console.log(authToken);
+            var url = `https://i8q13x3b0b.execute-api.eu-central-1.amazonaws.com/default/battlenet?session_id=${authToken}`;
+            console.log("Retrive user data:", url);
             window.location.href = url;
 
 
